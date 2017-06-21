@@ -22,32 +22,37 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
+
+var utils = require('cordova/utils');
+
 module.exports = {
-    show: function (parameters, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "show", [parameters]);
+    create: function (parameters, successCallback, errorCallback) {
+        var id = utils.createUUID();
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "create", [id, parameters]);
+	return id;
     },
-    setStream: function (url, controller, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "setStream", [url, controller]);
+    setStream: function (id, url, controller, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "setStream", [id, url, controller]);
     },
-    playPause: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "playPause", []);
+    playPause: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "playPause", [id]);
     },
-    stop: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "stop", []);
+    stop: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "stop", [id]);
     },
-    seekTo: function (milliseconds, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "seekTo", [milliseconds]);
+    seekTo: function (id, milliseconds, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "seekTo", [id, milliseconds]);
     },
-    getState: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "getState", []);
+    getState: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "getState", [id]);
     },
-    showController: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "showController", []);
+    showController: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "showController", [id]);
     },
-    hideController: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "hideController", []);
+    hideController: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "hideController", [id]);
     },
-    close: function (successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "ExoPlayer", "close", []);
+    close: function (id, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "close", [id]);
     }
 };
