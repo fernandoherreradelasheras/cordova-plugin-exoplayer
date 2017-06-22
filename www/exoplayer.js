@@ -54,5 +54,8 @@ module.exports = {
     },
     close: function (id, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "ExoPlayer", "close", [id]);
+    },
+    closeAll: function (successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "closeAll", []);
     }
 };

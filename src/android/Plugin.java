@@ -174,6 +174,18 @@ public class Plugin extends CordovaPlugin {
                 });
                 return true;
             }
+	    else if (action.equals("closeAll")) {
+                cordova.getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+			for (Player p : players.values()) {
+			    p.close();
+			}
+			players.clear();
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, false);
+                    }
+                });
+                return true;
+            }
             else {
                 new CallbackResponse(callbackContext).send(PluginResult.Status.INVALID_ACTION, false);
                 return false;
