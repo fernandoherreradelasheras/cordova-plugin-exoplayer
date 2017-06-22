@@ -28,6 +28,7 @@ import android.net.*;
 import android.view.ViewGroup;
 import org.apache.cordova.*;
 import org.json.*;
+import android.util.Log;
 
 public class Plugin extends CordovaPlugin {
     private HashMap<String, Player> players = new HashMap<String, Player>();
@@ -60,7 +61,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.setStream(Uri.parse(url), controller);
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
                 return true;
@@ -74,7 +75,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.playPause();
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
 
@@ -89,7 +90,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.stop();
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
 
@@ -105,7 +106,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.seekTo(seekTime);
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
                 return true;
@@ -133,7 +134,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.showController();
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
                 return true;
@@ -147,7 +148,7 @@ public class Plugin extends CordovaPlugin {
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         player.hideController();
-                        new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, true);
                     }
                 });
                 return true;
