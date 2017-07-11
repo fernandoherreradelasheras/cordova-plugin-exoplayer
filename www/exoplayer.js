@@ -57,5 +57,8 @@ module.exports = {
     },
     closeAll: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "ExoPlayer", "closeAll", []);
+    },
+    setVolume: function (id, volume, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "ExoPlayer", "setVolume", [id, volume]);
     }
 };
