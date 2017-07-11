@@ -340,12 +340,14 @@ public class Player {
         }
     }
 
-    public void playPause() {
+    public boolean playPause() {
         if (this.paused) {
             play();
+	    return true;
         }
         else {
             pause();
+	    return false;
         }
     }
 

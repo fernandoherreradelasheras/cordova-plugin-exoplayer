@@ -55,7 +55,7 @@ public class Payload {
     }
 
     public static JSONObject startEvent(ExoPlayer player, String audioFocus) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "START_EVENT");
         map.put("audioFocus", audioFocus);
         addPlayerState(map, player);
@@ -63,64 +63,64 @@ public class Payload {
     }
 
     public static JSONObject stopEvent(ExoPlayer player) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "STOP_EVENT");
         return new JSONObject(map);
     }
 
     public static JSONObject keyEvent(KeyEvent event) {
         int eventAction = event.getAction();
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "KEY_EVENT");
         map.put("eventAction", eventAction == KeyEvent.ACTION_DOWN ? "ACTION_DOWN" : eventAction == KeyEvent.ACTION_UP ? "ACTION_UP" : "" + eventAction);
-        map.put("eventKeycode", KeyEvent.keyCodeToString(event.getKeyCode()));
+        map.put("eventKeycode", new Integer (event.getKeyCode()));
         return new JSONObject(map);
     }
 
     public static JSONObject touchEvent(MotionEvent event) {
         int eventAction = event.getAction();
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "TOUCH_EVENT");
         map.put("eventAction", eventAction == MotionEvent.ACTION_DOWN ? "ACTION_DOWN" : eventAction == MotionEvent.ACTION_UP ? "ACTION_UP" : eventAction == MotionEvent.ACTION_MOVE ? "ACTION_MOVE" : "" + eventAction);
-        map.put("eventAxisX", Float.toString(event.getX()));
-        map.put("eventAxisY", Float.toString(event.getY()));
+        map.put("eventAxisX", new Float(event.getX()));
+        map.put("eventAxisY", new Float(event.getY()));
         return new JSONObject(map);
     }
 
     public static JSONObject loadingEvent(ExoPlayer player, boolean loading) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "LOADING_EVENT");
-        map.put("loading", Boolean.toString(loading));
+        map.put("loading", new Boolean(loading));
         addPlayerState(map, player);
         return new JSONObject(map);
     }
 
     public static JSONObject stateEvent(ExoPlayer player, int playbackState, boolean controllerVisible) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "STATE_CHANGED_EVENT");
         addPlayerState(map, player);
         map.put("playbackState", playbackStateToString(playbackState));
-        map.put("controllerVisible", Boolean.toString(controllerVisible));
+        map.put("controllerVisible", new Boolean(controllerVisible));
         return new JSONObject(map);
     }
 
     public static JSONObject positionDiscontinuityEvent(ExoPlayer player) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "POSITION_DISCONTINUITY_EVENT");
         addPlayerState(map, player);
         return new JSONObject(map);
     }
 
     public static JSONObject seekEvent(ExoPlayer player, long offset) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "SEEK_EVENT");
-        map.put("offset", Long.toString(offset));
+        map.put("offset", new Long(offset));
         addPlayerState(map, player);
         return new JSONObject(map);
     }
 
     public static JSONObject audioFocusEvent(ExoPlayer player, String state) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "AUDIO_FOCUS_EVENT");
         map.put("audioFocus", state);
         addPlayerState(map, player);
@@ -129,7 +129,7 @@ public class Payload {
 
     public static JSONObject playerErrorEvent(ExoPlayer player, ExoPlaybackException origin, String message) {
         int type = 0;
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("eventType", "PLAYER_ERROR_EVENT");
 
         if (null != origin) {
@@ -174,13 +174,13 @@ public class Payload {
         return new JSONObject(map);
     }
 
-    private static void addPlayerState(Map<String, String> map, ExoPlayer player) {
+    private static void addPlayerState(Map<String, Object> map, ExoPlayer player) {
         if (null != player) {
-            map.put("duration", Long.toString(player.getDuration()));
-            map.put("position", Long.toString(player.getCurrentPosition()));
-            map.put("playWhenReady", Boolean.toString(player.getPlayWhenReady()));
+            map.put("duration", new Long(player.getDuration()));
+            map.put("position", new Long(player.getCurrentPosition()));
+            map.put("playWhenReady", new Boolean(player.getPlayWhenReady()));
             map.put("playbackState", playbackStateToString(player.getPlaybackState()));
-            map.put("bufferPercentage", Integer.toString(player.getBufferedPercentage()));
+            map.put("bufferPercentage", new Integer(player.getBufferedPercentage()));
         }
     }
 }
