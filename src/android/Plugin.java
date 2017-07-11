@@ -186,6 +186,21 @@ public class Plugin extends CordovaPlugin {
                 });
                 return true;
             }
+            else if (action.equals("setVolume")) {
+                final String id = data.optString(0, "");
+                final double volume = data.optDouble(1, 1.0);
+		final Player player = players.get(id);
+                if (player == null) {
+                    return false;
+                }
+                cordova.getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        player.setVolume((float)volume);
+                        new CallbackResponse(callbackContext).send(PluginResult.Status.OK, false);
+                    }
+                });
+                return true;
+            }
             else {
                 new CallbackResponse(callbackContext).send(PluginResult.Status.INVALID_ACTION, false);
                 return false;
