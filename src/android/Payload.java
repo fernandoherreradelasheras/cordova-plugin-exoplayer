@@ -24,6 +24,7 @@
 package co.frontyard.cordova.plugin.exoplayer;
 
 import android.view.*;
+import android.util.Log;
 import com.google.android.exoplayer2.*;
 import java.lang.*;
 import java.lang.Boolean;
@@ -127,18 +128,7 @@ public class Payload {
         return new JSONObject(map);
     }
 
-    public static JSONObject playerErrorEvent(ExoPlayer player, ExoPlaybackException origin, String message) {
-        int type = 0;
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("eventType", "PLAYER_ERROR_EVENT");
-
-        if (null != origin) {
-            type = origin.type;
-            Throwable error = (Throwable) origin;
-            while (null != error.getCause()) {
-                error = error.getCause();
-            }
-            error.fillInStackTrace();
+    private static String getStackTrace(Throwable error) {
             StringBuffer stackTrace = new StringBuffer();
             if (null != error) {
                 StackTraceElement[] st = error.getStackTrace();
@@ -149,29 +139,52 @@ public class Payload {
                     }
                 }
             }
-            map.put("stackTrace", stackTrace.toString());
-            map.put("errorMessage", error.getMessage());
-        }
-        if (null != message) {
-            map.put("customMessage", message);
+	    return stackTrace.toString();
+    }
+
+
+    public static JSONObject playerErrorEvent(ExoPlayer player, ExoPlaybackException origin, String message) {
+        int type = 0;
+        JSONObject map = new JSONObject();
+	try {
+            map.put("eventType", "PLAYER_ERROR_EVENT");
+
+            if (null != origin) {
+	        JSONArray stacks = new JSONArray();
+                type = origin.type;
+                Throwable error = (Throwable) origin;
+	        do { 
+                    JSONObject stack = new JSONObject();
+                    stack.put("stackTrace", getStackTrace(error));
+                    stack.put("errorMessage", error.getMessage());
+		    stacks.put(stack);
+
+                    error = error.getCause();
+                } while (null != error);
+                map.put("stacks", stacks);
+            }
+            if (null != message) {
+                map.put("customMessage", message);
+            }
+
+            switch (type) {
+                case ExoPlaybackException.TYPE_RENDERER:
+                    map.put("errorType", "RENDERER");
+                    break;
+                case ExoPlaybackException.TYPE_SOURCE:
+                    map.put("errorType", "SOURCE");
+                    break;
+                case ExoPlaybackException.TYPE_UNEXPECTED:
+                    map.put("errorType", "UNEXPECTED");
+                    break;
+                default:
+                    map.put("errorType", "UNKNOWN");
+                    break;
+            }
+	} catch (JSONException e) {
         }
 
-        switch (type) {
-            case ExoPlaybackException.TYPE_RENDERER:
-                map.put("errorType", "RENDERER");
-                break;
-            case ExoPlaybackException.TYPE_SOURCE:
-                map.put("errorType", "SOURCE");
-                break;
-            case ExoPlaybackException.TYPE_UNEXPECTED:
-                map.put("errorType", "UNEXPECTED");
-                break;
-            default:
-                map.put("errorType", "UNKNOWN");
-                break;
-        }
-
-        return new JSONObject(map);
+        return map;
     }
 
     private static void addPlayerState(Map<String, Object> map, ExoPlayer player) {
