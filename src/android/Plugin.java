@@ -78,7 +78,10 @@ public class Plugin extends CordovaPlugin {
                     }
                     boolean isPlaying = player.playPause();
                     JSONObject response = new JSONObject();
-                    response.put("playing", isPlaying);
+                    try {
+                        response.put("playing", isPlaying);
+                    } catch (JSONException e) {
+                    }
                     new CallbackResponse(callbackContext).send(PluginResult.Status.OK, response, false);
                 }
             });
